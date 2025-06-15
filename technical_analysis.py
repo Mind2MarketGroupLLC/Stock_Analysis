@@ -60,11 +60,10 @@ def detect_crosses(df):
 
     return cross_type, macd_signal_crossover
 
-# 4. Fetch fundamentals from yfinance ticker (with current price)
+# 4. Fetch fundamentals from yfinance ticker
 def fetch_fundamentals(ticker):
     info = ticker.info
     fundamentals = {
-        'Current Price': info.get('currentPrice', 'N/A'),
         'Market Cap': info.get('marketCap', 'N/A'),
         'PE Ratio': info.get('trailingPE', 'N/A'),
         'EPS': info.get('trailingEps', 'N/A'),
@@ -188,8 +187,6 @@ def main():
         ticker = yf.Ticker(symbol)
         fundamentals = fetch_fundamentals(ticker)
 
-        st.subheader(f"Current Stock Price: ${fundamentals.get('Current Price', 'N/A')}")
-
         st.subheader(f"{symbol} Price Chart with Indicators")
         plot_stock(df, symbol)
 
@@ -201,8 +198,7 @@ def main():
 
         st.subheader("Fundamental Data")
         for key, val in fundamentals.items():
-            if key != 'Current Price':  # Already displayed above
-                st.write(f"- {key}: {val}")
+            st.write(f"- {key}: {val}")
 
         st.subheader("Recent News Headlines (NewsAPI)")
         headlines, links = fetch_newsapi_news(symbol)
